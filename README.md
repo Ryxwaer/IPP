@@ -1,4 +1,4 @@
-Implementační dokumentace k 1. úloze do IPP 2020/2021
+Implementační dokumentace k 2. úloze do IPP 2020/2021
 Jméno a příjmení: Adam Políček
 Login: xpolic05
 
@@ -23,8 +23,12 @@ Dalšie volitelné argumenty:
 ## Implementácia:
 
 >Kód je načítaný riadok po riadku. Je kontrolovaná lexikálna a syntaktická analíza.Návratové kódy a chybové hlásenia sú tiež obstarávané v tomto skripte. 
-Na koľko tento predmet opakujem tak som parseru nevenoval veľa pozornosti. Jedná sa viac menej o môj minuloročný projekt kde som ošetril pár drobností ako napríklad kontrolu hlavičky _IPPCODE21_. <br />
-![parse.php image](parse.png)
+Na koľko tento predmet opakujem tak som parseru nevenoval veľa pozornosti. Jedná sa viac menej o môj minuloročný projekt kde som ošetril pár drobností ako napríklad kontrolu hlavičky _IPPCODE21_.
+<p align="center">
+	<kbd>
+		<img src="parse.png" />
+	</kbd>
+</p>
 
 <br />
 
@@ -47,9 +51,12 @@ Dalšie volitelné argumenty:
 
 ```
 ## Implementácia:
-> Vstupné XML parsujem pomocou knižnice `xml.etree.ElementTree` ak je XML validné tak ho script prechádza podľa argumentov order od najnižšieho čísla po najvyššie. Ďalej sa každá funkcia v XML triedi pomocou jednoduchého if / elif. Načítavanie argumentov z XML sa odohráva v try bloku takže ak nieje funkcie správne zapísaná (napr. má menej argumentov) tak script okamžite končí chybou. Implementoval som vlastnú funkciu `log(s)`, ktorá v vypisuje debugovacie informácie prípade že je nastavený `DEBUG = True`. Neimplementoval som `Jump` a `frame` funguje vždy ako `globálny`. <br />
-![interpret.py image](interpret.png)
-
+> Vstupné XML parsujem pomocou knižnice `xml.etree.ElementTree` ak je XML validné tak ho script prechádza podľa argumentov order od najnižšieho čísla po najvyššie. Ďalej sa každá funkcia v XML triedi pomocou jednoduchého if / elif. Načítavanie argumentov z XML sa odohráva v try bloku takže ak nieje funkcie správne zapísaná (napr. má menej argumentov) tak script okamžite končí chybou. Implementoval som vlastnú funkciu `log(s)`, ktorá v vypisuje debugovacie informácie prípade že je nastavený `DEBUG = True`. Neimplementoval som `Jump` a `frame` funguje vždy ako `globálny`.
+<p align="center">
+	<kbd>
+		<img src="interpret.png" />
+	</kbd>
+</p>
 <br />
 
 # [test.php](test.php)
@@ -83,6 +90,10 @@ Ak nie je zadaný argument --int-only ani --parse-only tak sa pretestujú oba sc
 
 ## Výstupné HTML:
 > Pri štandardnom spúšťaní testovacieho scriptu odporúčam pridať na koniec za argumenty ` > output.html`.
+<p align="center">
+	<kbd>
+		<img src="test.png" />
+	</kbd>
+</p>
 
-![test.php image](test.png)
 > Riadok kde dôjde k rozdielu medzi outputom scriptu a testom test.out má text na celkom riadku červenou farbou ale pozadie je červené iba na prvých troch stĺpcoch. Ak sa nezhoduje návratová hodnota tak majú červené pozadie posledné dva stĺpce. Keď sa vypíšu všetky testy z jedného pričinku tak nasleduje jeden biely riadok so štatistikou daného pričinku.
