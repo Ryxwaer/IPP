@@ -23,7 +23,7 @@ Dalšie volitelné argumenty:
 ## Implementácia:
 
 >Kód je načítaný riadok po riadku. Je kontrolovaná lexikálna a syntaktická analíza.Návratové kódy a chybové hlásenia sú tiež obstarávané v tomto skripte. 
-Na koľko tento predmet opakujem tak som parseru nevenoval veľa pozornosti. Jedná sa viac menej o môj minuloročný projekt kde som ošetril pár drobností ako napríklad kontrolu hlavičky _IPPCODE21_.
+Na koľko tento predmet opakujem tak som parseru nevenoval veľa pozornosti. Jedná sa viac menej o môj minuloročný projekt kde som ošetril pár drobností ako napríklad kontrolu hlavičky _IPPCODE21_. <br />
 ![parse.php image](parse.png)
 
 <br />
