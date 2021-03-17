@@ -1,9 +1,9 @@
 <?php
 
-$LOG = true;
+$LOG = false;
 
 if ($LOG != true) {
-	error_reporting(E_WARNING);
+	error_reporting(E_ERROR);
 }
 
 function xml_is_equal(SimpleXMLElement $xml1, SimpleXMLElement $xml2, $text_strict = false) {
