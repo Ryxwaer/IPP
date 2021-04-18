@@ -51,6 +51,7 @@ Dalšie volitelné argumenty:
 
 ```
 ## Implementácia:
+> potrebné nainštalovať python3 moduly: `argparse` a `lxml` <br />
 > Vstupné XML parsujem pomocou knižnice `xml.etree.ElementTree` ak je XML validné tak ho script prechádza podľa argumentov order od najnižšieho čísla po najvyššie. Ďalej sa každá funkcia v XML triedi pomocou jednoduchého if / elif. Načítavanie argumentov z XML sa odohráva v try bloku takže ak nieje funkcie správne zapísaná (napr. má menej argumentov) tak script okamžite končí chybou. Implementoval som vlastnú funkciu `log(s)`, ktorá v vypisuje debugovacie informácie prípade že je nastavený `DEBUG = True`. Neimplementoval som `Jump` a `frame` funguje vždy ako `globálny`.
 <p align="center">
 	<kbd>
