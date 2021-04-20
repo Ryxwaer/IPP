@@ -1,6 +1,6 @@
 <?php
 
-$LOG = false;
+$LOG = true;
 
 if ($LOG != true) {
 	error_reporting(E_ERROR);
@@ -226,61 +226,68 @@ $returnCode = (getDirContents($path, '/\.rc$/', $recursive));
 $input = getDirContents($path, '/\.in$/', $recursive);
 #var_dump($source);
 
-$lenComparation = array(count($source), count($outFile), count($returnCode), count($input));
-
 // ak chyba daky testovaci subor tak ho doplni
 $restartCondition = false;
 for ($i = 0; $i < count($source); $i++) {
-	$nameOfSource = pathinfo($source[$i]);
-	$fileNameDiff = array($nameOfSource['filename'], 
-	pathinfo($outFile[$i])['filename'], 
-	pathinfo($returnCode[$i])['filename'], 
-	pathinfo($input[$i])['filename']);
 
-	// niesu rovnake
-	if (count(array_unique($fileNameDiff)) != 1) {
-		// treba doplnit subor .out
-		if ($nameOfSource['filename'] != pathinfo($outFile[$i])['filename']) {
+	$fileBase = substr($source[$i], 0, -4);
+	logg(" fileBase: " . $fileBase . "\n");
 
-			$newFileName = $nameOfSource['dirname'] . DIRECTORY_SEPARATOR . $nameOfSource['filename'] . ".out";
+	$fileBaseRC = $fileBase . ".rc";
 
-			if (file_put_contents($newFileName, "") !== false) {
+	logg(" fileBaseRC: " . $fileBaseRC . "\n");
+
+	if (!in_array($fileBase . ".rc", $returnCode)) {
+		$restartCondition = true;
+		logg(" fileBaseRC isn't there \n");
+		$newFileName = $fileBase . ".rc";
+		if (file_put_contents($newFileName, "0") !== false) {
 			    logg("File " . $newFileName . " created \n");
-				array_splice( $outFile, $i+1, 0, $newFileName );
 			} else {
 			    echo("Cannot create file " . $newFileName . "\n");
 			    exit(10);
 			}
-		}
-		// treba doplnit subor .in
-		if ($nameOfSource['filename'] != pathinfo($input[$i])['filename']) {
-
-			$newFileName = $nameOfSource['dirname'] . DIRECTORY_SEPARATOR . $nameOfSource['filename'] . ".in";
-
-			if (file_put_contents($newFileName, "") !== false) {
+	}
+	if (!in_array($fileBase . ".in", $input)) {
+		$restartCondition = true;
+		logg(" fileBaseRC isn't there \n");
+		$newFileName = $fileBase . ".in";
+		if (file_put_contents($newFileName, "") !== false) {
 			    logg("File " . $newFileName . " created \n");
-				array_splice( $input, $i+1, 0, $newFileName );
 			} else {
 			    echo("Cannot create file " . $newFileName . "\n");
 			    exit(10);
 			}
-		}
-		// treba doplnit subor .rc
-		if ($nameOfSource['filename'] != pathinfo($returnCode[$i])['filename']) {
-
-			$newFileName = $nameOfSource['dirname'] . DIRECTORY_SEPARATOR . $nameOfSource['filename'] . ".rc";
-
-			if (file_put_contents($newFileName, "0") !== false) {
+	}
+	if (!in_array($fileBase . ".out", $outFile)) {
+		$restartCondition = true;
+		logg(" fileBaseRC isn't there \n");
+		$newFileName = $fileBase . ".out";
+		if (file_put_contents($newFileName, "") !== false) {
 			    logg("File " . $newFileName . " created \n");
-				array_splice( $outFile, $i+1, 0, $newFileName );
 			} else {
 			    echo("Cannot create file " . $newFileName . "\n");
 			    exit(10);
 			}
-		}
 	}
 }
+if ($restartCondition = true) {
+	// .src files
+	$source = getDirContents($path, '/\.src$/', $recursive);
+	#var_dump($source);
 
+	// .out files
+	$outFile = (getDirContents($path, '/\.out$/', $recursive));
+	#var_dump($outFile);
+
+	// .out files
+	$returnCode = (getDirContents($path, '/\.rc$/', $recursive));
+	#var_dump($returnCode);
+
+	// .src files
+	$input = getDirContents($path, '/\.in$/', $recursive);
+	#var_dump($source);
+}
 
 // zaklad vysledneho html
 $HTML = "<TABLE style='width: 100%;border:line;border-collapse: collapse;'>
@@ -381,8 +388,8 @@ for ($i = 0; $i < $totalTestsCount; $i++)
 		$output = null;
 		$result_code = null;
 
-		logg("$ python " . $intScript . " --source=tmpOutput --input=" . $input[$i] . " > tmpOutput \n");
-		exec("python " . $intScript . " --source=tmpOutput --input=" . $input[$i] . " > tmpOutput", $output, $result_code);
+		logg("$ python3 " . $intScript . " --source=tmpOutput --input=" . $input[$i] . " > tmpOutput \n");
+		exec("python3 " . $intScript . " --source=tmpOutput --input=" . $input[$i] . " > tmpOutput", $output, $result_code);
 		
 		logg("$ diff --ignore-case --ignore-trailing-space --ignore-space-change --ignore-blank-lines --ignore-tab-expansion tmpOutput " . 
 			$outFile[$i] . "\n");
@@ -404,8 +411,8 @@ for ($i = 0; $i < $totalTestsCount; $i++)
 		}
 	}		// ******************************* INTERPRET **************************************** \\ 
 	else if ($testComplexity == "int") {
-		logg("$ python " . $intScript . " --source=" . $source[$i] . " --input=" . $input[$i] . " > tmpOutput \n");
-		exec("python " . $intScript . " --source=" . $source[$i] . " --input=" . $input[$i] . " > tmpOutput", $output, $result_code);
+		logg("$ python3 " . $intScript . " --source=" . $source[$i] . " --input=" . $input[$i] . " > tmpOutput \n");
+		exec("python3 " . $intScript . " --source=" . $source[$i] . " --input=" . $input[$i] . " > tmpOutput", $output, $result_code);
 		
 		logg("$ diff --ignore-case --ignore-trailing-space --ignore-space-change --ignore-blank-lines --ignore-tab-expansion tmpOutput " . 
 			$outFile[$i] . "\n");
