@@ -233,13 +233,9 @@ for ($i = 0; $i < count($source); $i++) {
 	$fileBase = substr($source[$i], 0, -4);
 	logg(" fileBase: " . $fileBase . "\n");
 
-	$fileBaseRC = $fileBase . ".rc";
-
-	logg(" fileBaseRC: " . $fileBaseRC . "\n");
-
 	if (!in_array($fileBase . ".rc", $returnCode)) {
 		$restartCondition = true;
-		logg(" fileBaseRC isn't there \n");
+		logg(" .rc isn't there \n");
 		$newFileName = $fileBase . ".rc";
 		if (file_put_contents($newFileName, "0") !== false) {
 			    logg("File " . $newFileName . " created \n");
@@ -250,7 +246,7 @@ for ($i = 0; $i < count($source); $i++) {
 	}
 	if (!in_array($fileBase . ".in", $input)) {
 		$restartCondition = true;
-		logg(" fileBaseRC isn't there \n");
+		logg(" .in isn't there \n");
 		$newFileName = $fileBase . ".in";
 		if (file_put_contents($newFileName, "") !== false) {
 			    logg("File " . $newFileName . " created \n");
@@ -261,7 +257,7 @@ for ($i = 0; $i < count($source); $i++) {
 	}
 	if (!in_array($fileBase . ".out", $outFile)) {
 		$restartCondition = true;
-		logg(" fileBaseRC isn't there \n");
+		logg(" .out isn't there \n");
 		$newFileName = $fileBase . ".out";
 		if (file_put_contents($newFileName, "") !== false) {
 			    logg("File " . $newFileName . " created \n");
