@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-"""
-	 Referencny interpret
-							"""
 import argparse
 from lxml import etree
 import xml.etree.ElementTree as ET
@@ -17,8 +14,7 @@ DEBUG = False
 
 parser = argparse.ArgumentParser(description='interpret')
 
-parser.add_argument('--source', dest='source',
-                    type=str, help='source XML file')
+parser.add_argument('--source', dest='source', type=str, help='source XML file')
 
 parser.add_argument('--input', dest='input', type=str, help='file with inputs')
 
@@ -59,18 +55,25 @@ orderNumbers = []
 
 stack = []
 varStorage = {}
+output=""
+outputErr=""
 
-for element in root.findall("./instruction"):
-    orderNumbers.append(int(element.attrib["order"]))
-
+try:
+    for element in root.findall("./instruction"):
+        if (int(element.attrib["order"]) not in orderNumbers and int(element.attrib["order"]) >= 0):
+            orderNumbers.append(int(element.attrib["order"]))
+        else:
+            raise
+except:
+    exit(32)
 orderNumbers.sort()
 
 for n in orderNumbers:
-    # iterate throught XML based on order number
-    element = root.find('.//instruction[@order="' + str(n) + '"]')
-    opcode = element.attrib["opcode"].upper()
-
     try:
+        # iterate throught XML based on order number
+        element = root.find('.//instruction[@order="' + str(n) + '"]')
+        opcode = element.attrib["opcode"].upper()
+
         # FRAMES
         if (opcode == "MOVE"):
             var = element.find('./arg1')
@@ -112,14 +115,14 @@ for n in orderNumbers:
                 exit(53)
             log("pushing to stak: " + toPush.text)
 
-            # stack.append()
         elif (opcode == "POPS"):
             variableName = element.find('./arg1').text
             if (len(stack) > 0):
                 varStorage[variableName] = stack.pop()
             else:
                 exit(56)
-            # MATH
+
+        # MATH Functions
         elif (opcode == "ADD"):
             var = element.find('./arg1')
             symb1 = element.find('./arg2')
@@ -145,6 +148,7 @@ for n in orderNumbers:
             varStorage[var.text] = result
             log(symb1.text + " + " + symb2.text + " = " + str(result))
         elif (opcode == "SUB"):
+            log("sub")
             var = element.find('./arg1')
             symb1 = element.find('./arg2')
             symb2 = element.find('./arg3')
@@ -190,6 +194,7 @@ for n in orderNumbers:
                     raise Exception('wrong type')
             except:
                 exit(53)
+            result = int(result)
             varStorage[var.text] = result
             log(symb1.text + " * " + symb2.text + " = " + str(result))
         elif (opcode == "IDIV"):
@@ -216,6 +221,7 @@ for n in orderNumbers:
                     raise Exception('wrong type')
             except:
                 exit(53)
+            result = int(result)
             varStorage[var.text] = result
             log(symb1.text + " / " + symb2.text + " = " + str(result))
         elif (opcode == "LT"):
@@ -408,9 +414,9 @@ for n in orderNumbers:
             if (symb.text == "nil@nil"):
                 symb.text = ""
             elif (symb.attrib["type"] == "var"):
-                print(varStorage[symb.text], end='')
+                output+=str(varStorage[symb.text])
             else:
-                print(symb.text, end='')
+                output+=symb.text
             # RETAZCE
         elif (opcode == "CONCAT"):
             var = element.find('./arg1')
@@ -505,15 +511,19 @@ for n in orderNumbers:
         elif (opcode == "DPRINT"):
             symb = element.find('./arg1').text
             if (symb in varStorage):
-                print(varStorage[symb], file=sys.stderr)
+                outputErr+=str(varStorage[symb])
             else:
-                print(symb, file=sys.stderr)
+                outputErr+=symb
         elif (opcode == "BREAK"):
-            print("stored variables: \n", varStorage,
-                  "\nstack: \n", stack, file=sys.stderr)
+            output+="stored variables: \n", varStorage, "\nstack: \n", stack
         else:
             log("\nunknown opcode: " + opcode)
-    except:
+            exit(32)
+    except Exception as e:
+        log(e)
         exit(32)
 
-print()
+if len(output) > 0:
+    print(output)
+if len(outputErr) > 0:
+    print(outputErr, file=sys.stderr)
